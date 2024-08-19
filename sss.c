@@ -22,7 +22,10 @@ int main(void)
 		write(1, "$ ", 2);
 		bytes_read = getline(&buffer, &n, stdin);
 		if (bytes_read == -1)
-			printf("Error de lectura\n");
+		{
+			printf("Bye\n");
+			break;
+		}
 		token = strtok(buffer, " \t\n");
 		array = malloc(sizeof(char *) * 1024);
 		if (!array)
