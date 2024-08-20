@@ -6,6 +6,11 @@ This project is a simple UNIX command line interpreter written in C. It is desig
 
 A shell is a program that lets you interact with your computer by typing commands. It takes the commands you enter, like opening files or running programs, and tells the computer's operating system to do those tasks. Think of it as a translator between you and the computer, helping you control and manage different functions through text-based input. Examples of shells include Bash and Zsh, which are commonly used on Unix-like systems.
 
+## Flowchart  🦁
+
+![alt text](https://github.com/Jonatha32/holbertonschool-simple_shell/blob/main/Flowchart.jpg?raw=true)
+
+
 ## Features 📝
 
 - **Command Execution**: The shell can execute basic commands.
