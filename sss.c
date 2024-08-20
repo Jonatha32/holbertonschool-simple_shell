@@ -127,9 +127,7 @@ int main(int ac __attribute__((unused)),
 			if (strcmp(token, "exit") == 0)
 			{
 				printf("Exiting...\n");
-				free(buffer);
-				free(array);
-				return (0);
+				break;
 			}
 			else if (strcmp(token, "env") == 0)
 			{
@@ -138,6 +136,12 @@ int main(int ac __attribute__((unused)),
 			}
 			token = strtok(NULL, " \t\n");
 			i++;
+		}
+
+		if (strcmp(array[0], "exit") == 0)
+		{
+			free(array);
+			break;
 		}
 		if (envb == 1)
 		{
@@ -163,7 +167,8 @@ int main(int ac __attribute__((unused)),
 		}
 		else
 			wait(&status);
-		free(command);
+		if (command != array[0])
+			free(command);
 		free(array);
 	}
 	free(buffer);
