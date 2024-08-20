@@ -3,6 +3,11 @@
 #include <stdlib.h>
 #include <sys/wait.h>
 #include <unistd.h>
+/**
+ * _getpath - Gets the String of the PATH
+ * @name: Name of Environment Variable to look for
+ * Return: String
+ */
 char *_getpath(const char *name)
 {
 	extern char **environ;
@@ -20,12 +25,17 @@ char *_getpath(const char *name)
 			str = strdup(token);
 			free(env_cpy);
 			return (str);
- 		}
+		}
 		free(env_cpy);
 		i++;
 	}
 	return (NULL);
-} 
+}
+/**
+ * findcommand - Finds the path of the command to execute
+ * @strcom: Path or command to execute
+ * Return: String of path of command
+ */
 char *findcommand(char *strcom)
 {
 	char *path, *token, *command;
@@ -48,7 +58,7 @@ char *findcommand(char *strcom)
 			strcpy(command, token);
 			strcat(command, "/");
 			strcat(command, strcom);
-			
+
 			if (access(command, F_OK) == 0)
 			{
 				free(path);
@@ -67,26 +77,30 @@ char *findcommand(char *strcom)
 }
 /**
  * getenv - prints the environment
- *
+ * @env: Environment Variables
  * Return: Always 0.
  */
 int _getenv(char **env)
 {
-    unsigned int i;
+	unsigned int i;
 
-    i = 0;
-    while (env[i] != NULL)
-    {
-        printf("%s\n", env[i]);
-        i++;
-    }
-    return (0);
+	i = 0;
+	while (env[i] != NULL)
+	{
+		printf("%s\n", env[i]);
+		i++;
+	}
+	return (0);
 }
 /**
  * main - Super Simple Shell
+ * @ac: Count of Arguments
+ * @av: Array of String Arguments
+ * @env: Environment Variables
  * Return: 1 Always Success
  */
-int main(int ac __attribute__((unused)), char **av __attribute__((unused)), char **env)
+int main(int ac __attribute__((unused)),
+		char **av __attribute__((unused)), char **env)
 {
 	size_t n, bytes_read = 0, eof = -1, ljump = 1;
 	int pid, status, i = 0, envb = 0;
