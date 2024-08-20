@@ -26,7 +26,7 @@ char *_getpath(const char *name)
 	}
 	return (NULL);
 } 
-char *findcommand(char *strcom, char **av)
+char *findcommand(char *strcom)
 {
 	char *path, *token, *command;
 
@@ -70,7 +70,7 @@ char *findcommand(char *strcom, char **av)
  *
  * Return: Always 0.
  */
-int _getenv(int ac, char **av, char **env)
+int _getenv(char **env)
 {
     unsigned int i;
 
@@ -86,9 +86,9 @@ int _getenv(int ac, char **av, char **env)
  * main - Super Simple Shell
  * Return: 1 Always Success
  */
-int main(int ac, char **av, char **env)
+int main(int ac __attribute__((unused)), char **av __attribute__((unused)), char **env)
 {
-	size_t n, bytes_read = 0;
+	size_t n, bytes_read = 0, eof = -1, ljump = 1;
 	int pid, status, i = 0, envb = 0;
 	char **array;
 	char *token, *command, *buffer = NULL;
@@ -97,11 +97,11 @@ int main(int ac, char **av, char **env)
 	{
 		write(1, "$ ", 2);
 		bytes_read = getline(&buffer, &n, stdin);
-		if (bytes_read == -1)
+		if (bytes_read == eof)
 		{
 			printf("Bye\n");
 			break;
-		} else if (bytes_read == 1)
+		} else if (bytes_read == ljump)
 			continue;
 		token = strtok(buffer, " \t\n");
 		array = malloc(sizeof(char *) * 1024);
@@ -119,7 +119,7 @@ int main(int ac, char **av, char **env)
 			}
 			else if (strcmp(token, "env") == 0)
 			{
-				_getenv(ac, av, env);
+				_getenv(env);
 				envb = 1;
 			}
 			token = strtok(NULL, " \t\n");
@@ -132,7 +132,7 @@ int main(int ac, char **av, char **env)
 		}
 		array[i] = NULL;
 		i = 0;
-		command = findcommand(array[0], array);
+		command = findcommand(array[0]);
 		if (!command)
 		{
 			printf("Error: Command not found\n");
