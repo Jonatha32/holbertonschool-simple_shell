@@ -7,19 +7,21 @@ char *_getpath(const char *name)
 {
 	extern char **environ;
 	int i;
-	char *token, *str;
+	char *token, *str, *env_cpy;
 
 	i = 0;
 	while (environ[i])
 	{
-		token = strtok(environ[i], "=");
+		env_cpy = strdup(environ[i]);
+		token = strtok(env_cpy, "=");
 		if (strcmp(token, name) == 0)
 		{
 			token = strtok(NULL, "=");
-			str = malloc(sizeof(char) * (strlen(token) + 1));
 			str = strdup(token);
+			free(env_cpy);
 			return (str);
  		}
+		free(env_cpy);
 		i++;
 	}
 	return (NULL);
@@ -28,8 +30,9 @@ char *findcommand(char *strcom, char **av)
 {
 	char *path, *token, *command;
 
+	if (access(strcom, F_OK) == 0)
+		return (strcom);
 	path = _getpath("PATH");
-	printf("PATH es %s\n", path);
 	if (path)
 	{
 		token = strtok(path, ":");
@@ -37,22 +40,29 @@ char *findcommand(char *strcom, char **av)
 		{
 			command = malloc(sizeof(char) * (strlen(token) + 1 + strlen(strcom)));
 			if (!command)
+			{
+				free(path);
 				return (NULL);
+			}
 
-
-			command = strdup(token);
-			command = strcat(command, "/");
-			command = strcat(command, strcom);
-
+			strcpy(command, token);
+			strcat(command, "/");
+			strcat(command, strcom);
+			
 			if (access(command, F_OK) == 0)
+			{
+				free(path);
 				return (command);
+			}
 			else
 			{
 				token = strtok(NULL, ":");
 				free(command);
 			}
 		}
+	free(path);
 	}
+
 	return (NULL);
 }
 /**
@@ -81,7 +91,7 @@ int main(int ac, char **av, char **env)
 	size_t n, bytes_read = 0;
 	int pid, status, i = 0, envb = 0;
 	char **array;
-	char *token, *command, *buffer;
+	char *token, *command, *buffer = NULL;
 
 	while (1)
 	{
@@ -91,7 +101,8 @@ int main(int ac, char **av, char **env)
 		{
 			printf("Bye\n");
 			break;
-		}
+		} else if (bytes_read == 1)
+			continue;
 		token = strtok(buffer, " \t\n");
 		array = malloc(sizeof(char *) * 1024);
 		if (!array)
@@ -102,6 +113,8 @@ int main(int ac, char **av, char **env)
 			if (strcmp(token, "exit") == 0)
 			{
 				printf("Exiting...\n");
+				free(buffer);
+				free(array);
 				return (0);
 			}
 			else if (strcmp(token, "env") == 0)
@@ -120,7 +133,6 @@ int main(int ac, char **av, char **env)
 		array[i] = NULL;
 		i = 0;
 		command = findcommand(array[0], array);
-		printf("Command es: %s\n", command);
 		if (!command)
 		{
 			printf("Error: Command not found\n");
@@ -132,12 +144,14 @@ int main(int ac, char **av, char **env)
 			printf("Error con fork\n");
 		if (pid == 0)
 		{
-			if (execve(command, array, NULL) == -1)
+			if (execve(command, array, env) == -1)
 				printf("Error con execve\n");
 		}
 		else
 			wait(&status);
+		free(command);
 		free(array);
 	}
+	free(buffer);
 	return (0);
 }
