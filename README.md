@@ -8,7 +8,7 @@ A shell is a program that lets you interact with your computer by typing command
 
 ## Features 📝
 
-- **Command Execution**: The shell can execute basic commands with no arguments. The command must be specified with its absolute path.
+- **Command Execution**: The shell can execute basic commands.
 - **Prompt**: Displays a prompt waiting for user input. After executing a command, the prompt is displayed again.
 - **Error Handling**: Displays an error message if a command cannot be found or executed.
 - **EOF Handling**: Supports the `Ctrl+D` command to exit the shell.
