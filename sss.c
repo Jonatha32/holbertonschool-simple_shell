@@ -99,8 +99,7 @@ int _getenv(char **env)
  * @env: Environment Variables
  * Return: 1 Always Success
  */
-int main(int ac __attribute__((unused)),
-		char **av __attribute__((unused)), char **env)
+int main(int ac __attribute__((unused)), char **av, char **env)
 {
 	size_t n, bytes_read = 0, eof = -1, ljump = 1;
 	int pid, status, i = 0, envb = 0;
@@ -156,17 +155,17 @@ int main(int ac __attribute__((unused)),
 		command = findcommand(array[0]);
 		if (!command)
 		{
-			printf("Error: Command not found\n");
+			perror(av[0]);
 			free(array);
 			continue;
 		}
 		pid = fork();
 		if (pid == -1)
-			printf("Error con fork\n");
+			perror(av[0]);
 		if (pid == 0)
 		{
 			if (execve(command, array, env) == -1)
-				printf("Error con execve\n");
+				perror(av[0]);
 		}
 		else
 			wait(&status);
