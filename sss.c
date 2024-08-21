@@ -120,7 +120,10 @@ int main(int ac __attribute__((unused)),
 		token = strtok(buffer, " \t\n");
 		array = malloc(sizeof(char *) * 1024);
 		if (!array)
+		{
 			printf("Error de memoria\n");
+			break;
+		}
 		while (token)
 		{
 			array[i] = token;
