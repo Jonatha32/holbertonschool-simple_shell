@@ -108,7 +108,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 
 	while (1)
 	{
-		write(1, "$ ", 2);
+		write(1, "", 0);
 		bytes_read = getline(&buffer, &n, stdin);
 		if (bytes_read == eof)
 			break;
