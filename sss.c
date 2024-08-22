@@ -125,10 +125,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		{
 			array[i] = token;
 			if (strcmp(token, "exit") == 0)
-			{
-				printf("Exiting...\n");
 				break;
-			}
 			else if (strcmp(token, "env") == 0)
 			{
 				_getenv(env);
