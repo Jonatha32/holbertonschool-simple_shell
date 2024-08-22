@@ -48,7 +48,7 @@ char *findcommand(char *strcom)
 		token = strtok(path, ":");
 		while (token)
 		{
-			command = malloc(sizeof(char) * (strlen(token) + 1 + strlen(strcom)));
+			command = malloc(sizeof(char) * (strlen(token) + 2 + strlen(strcom)));
 			if (!command)
 			{
 				free(path);
