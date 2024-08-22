@@ -102,9 +102,9 @@ int _getenv(char **env)
 int main(int ac __attribute__((unused)), char **av, char **env)
 {
 	size_t n, bytes_read = 0, eof = -1, ljump = 1;
-	int pid, status, i = 0, envb = 0, exitval = 0;
+	int pid, status, i = 0, envb = 0, exitval = 0, ntok = 0;
 	char **array;
-	char *token, *command, *buffer = NULL;
+	char *token, *command, *buffer = NULL, *buffcpy;
 
 	while (1)
 	{
@@ -114,14 +114,23 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 			break;
 		else if (bytes_read == ljump)
 			continue;
-		token = strtok(buffer, " \t\n");
-		array = malloc(sizeof(char *) * 10);
+		buffcpy = strdup(buffer);
+		token = strtok(buffcpy, " \t\n");
+		while (token)
+		{
+			ntok++;
+			token = strtok(NULL, " \t\n");
+		}
+		free(buffcpy);
+		if (ntok == 0)
+			continue;
+		array = malloc(sizeof(char *) * ntok);
 		if (!array)
 		{
 			printf("Error de memoria\n");
 			break;
 		}
-
+		token = strtok(buffer, " \t\n");
 		while (token)
 		{
 			array[i] = token;
