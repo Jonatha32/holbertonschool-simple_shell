@@ -111,10 +111,8 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		write(1, "$ ", 2);
 		bytes_read = getline(&buffer, &n, stdin);
 		if (bytes_read == eof)
-		{
-			printf("Bye\n");
 			break;
-		} else if (bytes_read == ljump)
+		else if (bytes_read == ljump)
 			continue;
 		token = strtok(buffer, " \t\n");
 		array = malloc(sizeof(char *) * 1024);
