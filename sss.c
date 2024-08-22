@@ -102,7 +102,7 @@ int _getenv(char **env)
 int main(int ac __attribute__((unused)), char **av, char **env)
 {
 	size_t n, bytes_read = 0, eof = -1, ljump = 1;
-	int pid, status, i = 0, envb = 0;
+	int pid, status, i = 0, envb = 0, exitval = 0;
 	char **array;
 	char *token, *command, *buffer = NULL;
 
@@ -115,25 +115,23 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		else if (bytes_read == ljump)
 			continue;
 		token = strtok(buffer, " \t\n");
-		array = malloc(sizeof(char *) * 1024);
+		array = malloc(sizeof(char *) * 10);
 		if (!array)
 		{
 			printf("Error de memoria\n");
 			break;
 		}
+
 		while (token)
 		{
 			array[i] = token;
-			if (strcmp(token, "exit") == 0)
-				break;
-			else if (strcmp(token, "env") == 0)
-			{
-				_getenv(env);
-				envb = 1;
-			}
+			if (strcmp(array[i], "exit"))
+				exitval = 1;
 			token = strtok(NULL, " \t\n");
 			i++;
 		}
+		array[i] = NULL;
+		i = 0;
 
 		if (strcmp(array[0], "exit") == 0)
 		{
@@ -145,8 +143,6 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 			free(array);
 			continue;
 		}
-		array[i] = NULL;
-		i = 0;
 		command = findcommand(array[0]);
 		if (!command)
 		{
@@ -167,6 +163,8 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		if (command != array[0])
 			free(command);
 		free(array);
+		if (exitval == 1)
+			break;
 	}
 	free(buffer);
 	return (0);
