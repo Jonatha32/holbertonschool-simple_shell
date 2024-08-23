@@ -104,7 +104,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 	size_t n, bytes_read = 0, eof = -1, ljump = 1;
 	int pid, status, i = 0, envb = 0, exitval = 0, ntok = 0;
 	char **array;
-	char *token, *command, *buffer = NULL, *buffcpy = NULL;
+	char *token, *command, *buffer = NULL, *buffcpy;
 
 	while (1)
 	{
@@ -124,8 +124,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		free(buffcpy);
 		if (ntok == 0)
 			continue;
-		ntok = 0;
-		array = malloc(sizeof(char *) * (ntok + 1));
+		array = malloc(sizeof(char *) * ntok);
 		if (!array)
 		{
 			printf("Error de memoria\n");
@@ -135,7 +134,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		while (token)
 		{
 			array[i] = token;
-			if (strcmp(array[i], "exit") == 0)
+			if (strcmp(array[i], "exit"))
 				exitval = 1;
 			token = strtok(NULL, " \t\n");
 			i++;
