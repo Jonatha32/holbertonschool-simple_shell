@@ -93,35 +93,6 @@ int _getenv(char **env)
 	return (0);
 }
 /**
- * execommand - Executes with Fork - Wait - Execve a command
- * @str: Command
- * @name: Name of program
- * Return: None
- */
-void execommand(char *str, char *name)
-{
-	char *command;
-
-	command = findcommand(str);
-		if (!command)
-		{
-			perror(name);
-			return;
-		}
-		pid = fork();
-		if (pid == -1)
-			perror(name);
-		if (pid == 0)
-		{
-			if (execve(command, array, env) == -1)
-				perror(name);
-		}
-		else
-			wait(&status);
-		if (command != str)
-			free(command);
-}
-/**
  * main - Super Simple Shell
  * @ac: Count of Arguments
  * @av: Array of String Arguments
@@ -172,11 +143,25 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 			free(array);
 			continue;
 		}
-		while (array[i])
+		command = findcommand(array[0]);
+		if (!command)
 		{
-			execommand(array[i], av[0]);
-			i++;
+			perror(av[0]);
+			free(array);
+			continue;
 		}
+		pid = fork();
+		if (pid == -1)
+			perror(av[0]);
+		if (pid == 0)
+		{
+			if (execve(command, array, env) == -1)
+				perror(av[0]);
+		}
+		else
+			wait(&status);
+		if (command != array[0])
+			free(command);
 		free(array);
 		if (exitval == 1)
 			break;
@@ -184,4 +169,3 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 	free(buffer);
 	return (0);
 }
-
