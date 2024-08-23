@@ -98,8 +98,9 @@ int _getenv(char **env)
  * @name: Name of program
  * Return: None
  */
-void execommand(char *str, char *name)
+void execommand(char *str, char **arr, char **env, char *name)
 {
+	int pid, status;
 	char *command;
 
 	command = findcommand(str);
@@ -113,7 +114,7 @@ void execommand(char *str, char *name)
 			perror(name);
 		if (pid == 0)
 		{
-			if (execve(command, array, env) == -1)
+			if (execve(command, arr, env) == -1)
 				perror(name);
 		}
 		else
@@ -131,9 +132,9 @@ void execommand(char *str, char *name)
 int main(int ac __attribute__((unused)), char **av, char **env)
 {
 	size_t n, bytes_read = 0, eof = -1, ljump = 1;
-	int pid, status, i = 0, envb = 0, exitval = 0;
+	int i = 0, envb = 0, exitval = 0;
 	char **array;
-	char *token, *command, *buffer = NULL;
+	char *token, *buffer = NULL;
 
 	while (1)
 	{
@@ -174,7 +175,7 @@ int main(int ac __attribute__((unused)), char **av, char **env)
 		}
 		while (array[i])
 		{
-			execommand(array[i], av[0]);
+			execommand(array[i], array, env, av[0]);
 			i++;
 		}
 		free(array);
