@@ -14,7 +14,7 @@ int main(void)
 	{
 		printf("#jbk$ ");
 		input = read_input();
-		
+
 		if (input == NULL)
 		{
 			free(input);
