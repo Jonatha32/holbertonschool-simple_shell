@@ -12,4 +12,5 @@ Simple Shell is a simple UNIX command interpreter that allows users to execute c
 
 To compile the shell, use the following command:
 
-gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh
+```bash
+`gcc -Wall -Werror -Wextra -pedantic -std=gnu89 *.c -o hsh`
