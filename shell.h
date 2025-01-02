@@ -8,11 +8,8 @@
 #include <sys/types.h>
 #include <sys/wait.h>
 
-int main(int argc, char **argv);
+int main(void);
 void execute_command(char *input);
-void handle_error(char *command);
 char *read_input(void);
-char **parse_input(char *input);
-void free_arguments(char **args);
 
 #endif
