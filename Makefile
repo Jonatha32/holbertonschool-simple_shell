@@ -1,6 +1,6 @@
 CC = gcc
 CFLAGS = -Wall -Werror -Wextra -pedantic -std=gnu89
-OBJ = main.o jbk_shell
+OBJ = main.o jbk_shell.o
 
 all: jbk_shell
 

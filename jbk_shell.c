@@ -26,32 +26,36 @@ char *read_input(void)
 
 void execute_command(char *input)
 {
-	pid_t pid;
-	int status;
-	char *command = strtok(input, "\n");
-	
-	if (command == NULL || strlen(command) == 0)
-	{
-		return;
-	}
-	
-	pid = fork();
-	if (pid == -1)
-	{
-		perror("fork");
-		return;
-	}
-	
-	if (pid == 0)
-	{
-		if (execve(command, NULL, NULL) == -1)
-		{
-			fprintf(stderr, "./jbk_shell: No such file or directory\n");
-			exit(EXIT_FAILURE);
-		}
-	}
-	else
-	{
-		wait(&status);
-	}
+        pid_t pid;
+        int status;
+        char *command = strtok(input, "\n");
+
+        if (command == NULL || strlen(command) == 0)
+        {
+                return;
+        }
+
+        pid = fork();
+        if (pid == -1)
+        {
+                perror("fork");
+                return;
+        }
+
+        if (pid == 0)
+        {
+                char *argv[2];
+		argv[0] = command;
+		argv[1] = NULL;
+
+                if (execve(command, argv, NULL) == -1)
+                {
+                        fprintf(stderr, "./jbk_shell: No such file or directory\n");
+                        exit(EXIT_FAILURE);
+                }
+        }
+        else
+        {
+                wait(&status);
+        }
 }
