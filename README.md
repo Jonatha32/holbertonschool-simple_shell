@@ -22,7 +22,7 @@ The implementation of this shell demonstrates understanding and application of s
 
 ## 🦁 Flowchart
 
-![Texto alternativo]()
+![Texto alternativo](https://github.com/Jonatha32/holbertonschool-simple_shell/blob/main/Start%20Program.jpg)
 
 ## 😐 Files Description
 
@@ -69,3 +69,9 @@ To compile the shell, use the following command:
 + *For valid commands:* The output of the command as executed by the system.
 + *For invalid commands:* An error message in the format: `<command>: Command not found`.
 + *For `exit`:* The shell terminates gracefully
+
+## 😎 Authors
+
+* **[Bruno Salle](https://github.com/sallebruno)**
+* **[Kevin Acosta](KevinAcostaa)**
+* **[Jonathan Pérez](https://github.com/Jonatha32)**
