@@ -11,7 +11,7 @@
  * @argv: parameter
  * Return: Always 0
  */
-int main(int argc, char *argv[])
+int main(int argc __attribute__((unused)), char *argv[] __attribute__((unused)))
 {
 	ssize_t bytes_read = 0;
 	size_t len = 0;
