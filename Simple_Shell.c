@@ -6,6 +6,31 @@
 #include "shell.h"
 
 /**
+ * get_env_value - Gets the value of an environment variable.
+ * @name: The name of the variable.
+ * Return: The value of the variable.
+ */
+
+char *get_env_value(const char *name)
+{
+	char *entrada, *valor;
+	size_t len = strlen(name);
+	int i = 0;
+
+	while (environ[i] != NULL)
+	{
+		entrada = environ[i];
+		if (strncmp(entrada, name, len) == 0 && entrada[len] == '=')
+		{
+			valor = entrada + len + 1;
+			return (valor);
+		}
+		i++;
+	}
+	return (NULL);
+}
+
+/**
  * main - function
  * @argc: parameter
  * @argv: parameter
@@ -15,7 +40,7 @@ int main(int argc __attribute__((unused)), char *argv[] __attribute__((unused)))
 {
 	ssize_t bytes_read = 0;
 	size_t len = 0;
-	char *line = NULL, *path = getenv("PATH");
+	char *line = NULL, *path = get_env_value("PATH");
 
 	if (path == NULL)
 	{
