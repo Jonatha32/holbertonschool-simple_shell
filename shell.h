@@ -9,7 +9,7 @@
 #include <sys/wait.h>
 
 extern char **environ;
-char *find_comm(char *command, char *path)
+char *find_comm(char *command, char *path);
 void exe_com(char *command, char *path);
 
 #endif
