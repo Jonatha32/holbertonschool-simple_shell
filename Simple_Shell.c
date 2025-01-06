@@ -7,15 +7,14 @@
 
 /**
  * main - function
- * @argc: parameter
- * @argv: parameter
+ *
  * Return: Always 0
  */
-int main(int argc __attribute__((unused)), char *argv[] __attribute__((unused)))
+int main(void)
 {
 	ssize_t bytes_read = 0;
 	size_t len = 0;
-	char *line = NULL, *path = get_env_value("PATH");
+	char *line = NULL, *path = getenv("PATH");
 
 	if (path == NULL)
 	{
