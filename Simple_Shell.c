@@ -5,6 +5,8 @@
 #include <sys/wait.h>
 #include "shell.h"
 
+extern char **environ;
+
 /**
  * get_env_value - Gets the value of an environment variable.
  * @name: The name of the variable.
@@ -54,8 +56,10 @@ int main(int argc __attribute__((unused)), char *argv[] __attribute__((unused)))
 		bytes_read = getline(&line, &len, stdin);
 		if (bytes_read == -1)
 		{
-			perror("Read Line Error");
-			break;
+			if (feof(stdin))
+				break;
+			perror("getline");
+			continue;
 		}
 
 		line[strcspn(line, "\n")] = '\0';
