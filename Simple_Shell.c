@@ -6,10 +6,55 @@
 #include "shell.h"
 
 /**
+ * exe_com - tokenizes the input and execute
+ * @line: input
+ * @path: PATH Variable
+ */
+
+void exe_com(char *line, char *path)
+{
+	char *argumentos[100], *token;
+	char *full_path;
+	int i = 0;
+	pid_t pid;
+
+	token = strtok(line, " ");
+	while (token != NULL && i < 99)
+	{
+	argumentos[i++] = token;
+	token = strtok(NULL, " ");
+	}
+	argumentos[i] = NULL;
+	full_path = find_comm(argumentos[0], path);
+	if (full_path == NULL)
+	{
+		printf("%s: Command not found\n", argumentos[0]);
+		return;
+	}
+	pid = fork();
+			if (pid == 0)
+			{
+				execve(full_path, argumentos, environ);
+				perror("Execution Failed");
+				exit(EXIT_FAILURE);
+			}
+			else if (pid > 0)
+			{
+				wait(NULL);
+			}
+			else
+			{
+				perror("Fork Failed");
+			}
+	free(full_path);
+}
+
+/**
  * main - function
  *
  * Return: Always 0
  */
+
 int main(void)
 {
 	ssize_t bytes_read = 0;
