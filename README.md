@@ -22,7 +22,7 @@ The implementation of this shell demonstrates understanding and application of s
 
 ## 🦁 Flowchart
 
-![Texto alternativo](https://github.com/Jonatha32/holbertonschool-simple_shell/blob/main/Start%20Program.jpg)
+![Texto alternativo](https://github.com/Jonatha32/holbertonschool-simple_shell/blob/main/Flowchart.jpg)
 
 ## 😐 Files Description
 
