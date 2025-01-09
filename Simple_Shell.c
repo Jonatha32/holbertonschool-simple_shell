@@ -1,125 +1,34 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 #include <unistd.h>
-#include <sys/wait.h>
 #include "shell.h"
 
 /**
- * find_comm - find command in PATH
- * @command: parameter
- * @path: path
- * Return: Full Path
- */
-
-char *find_comm(char *command, char *path)
-{
-	char *copia_path = strdup(path);
-	char *dirpath = strtok(copia_path, ":");
-	char full_path[1024];
-	char *resultado = NULL;
-
-	if (strchr(command, '/'))
-	{
-		if (access(command, X_OK) == 0)
-			return (strdup(command));
-		return (NULL);
-	}
-
-	while (dirpath != NULL)
-	{
-	snprintf(full_path, sizeof(full_path), "%s/%s", dirpath, command);
-		if (access(full_path, X_OK) == 0)
-		{
-		resultado = strdup(full_path);
-		break;
-		}
-		dirpath = strtok(NULL, ":");
-	}
-	free(copia_path);
-	return (resultado);
-}
-
-/**
- * exe_com - tokenizes the input and execute
- * @line: input
- * @path: PATH Variable
- */
-
-void exe_com(char *line, char *path)
-{
-	char *argumentos[100], *token;
-	char *full_path;
-	int i = 0;
-	pid_t pid;
-
-	token = strtok(line, " ");
-	while (token != NULL && i < 99)
-	{
-	argumentos[i++] = token;
-	token = strtok(NULL, " ");
-	}
-	argumentos[i] = NULL;
-	full_path = find_comm(argumentos[0], path);
-	if (full_path == NULL)
-	{
-		printf("%s: Command not found\n", argumentos[0]);
-		return;
-	}
-	pid = fork();
-			if (pid == 0)
-			{
-				execve(full_path, argumentos, environ);
-				perror("Execution Failed");
-				exit(EXIT_FAILURE);
-			}
-			else if (pid > 0)
-			{
-				wait(NULL);
-			}
-			else
-			{
-				perror("Fork Failed");
-			}
-	free(full_path);
-}
-
-/**
- * main - function
  *
- * Return: Always 0
+ *
  */
 
 int main(void)
 {
-	ssize_t bytes_read = 0;
-	size_t len = 0;
-	char *line = NULL, *path = getenv("PATH");
-
-	if (path == NULL)
-	{
-		perror("Failed to get PATH");
-		return (1);
-	}
+	char *line = NULL;
+	size_t bufsize = 0;
+	ssize_t bytes_read;
 
 	while (1)
 	{
-		printf("Simple_Shell$ ");
-		bytes_read = getline(&line, &len, stdin);
+		printf("#Simple_Shell$ ");
+
+		bytes_read = getline(&line, &bufsize, stdin);
 		if (bytes_read == -1)
 		{
-			if (feof(stdin))
-				break;
-			perror("getline");
-			continue;
+			perror("Getline Error");
+			break;
 		}
 
 		line[strcspn(line, "\n")] = '\0';
-		if (strcmp(line, "exit") == 0)
-			break;
-		exe_com(line, path);
+
+		execute_command(line);
 	}
 	free(line);
 	return (0);
 }
-
