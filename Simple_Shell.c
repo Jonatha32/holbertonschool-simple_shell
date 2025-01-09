@@ -16,22 +16,25 @@ int main(void)
 
 	while (1)
 	{
-		printf("#Simple_Shell$ ");
+		if (isatty(STDIN_FILENO))
+			printf("#Simple_Shell$ ");
 
 		bytes_read = getline(&line, &bufsize, stdin);
 		if (bytes_read == -1)
 		{
-			if (feof(stdin))
-			{
-				printf("Exiting Shell...\n");
-				break;
-			}
 			perror("Getline Error");
-			continue;
+			exit(EXIT_FAILURE);
 		}
+		if (bytes_read == 0)
+			break;
 
 		line[strcspn(line, "\n")] = '\0';
-
+		if (strcmp(line, "exit") == 0)
+		{
+			if (isatty(STDIN_FILENO))
+				printf("Exit Shell...\n");
+			break;
+		}
 		execute_command(line);
 	}
 	free(line);
