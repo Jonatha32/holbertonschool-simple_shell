@@ -12,11 +12,13 @@
 
 void execute_command(char *line)
 {
-	char *argv[2];
+	char *argv[64];
 	pid_t pid;
+	int i = 0;
 
-	argv[0] = line;
-	argv[1] = NULL;
+	argv[i] = strtok(line, " ");
+	while (argv[i] != NULL && i < 63)
+		argv[++i] = strtok(NULL, " ");
 
 	pid = fork();
 	if (pid == -1)

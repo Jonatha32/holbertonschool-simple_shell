@@ -22,11 +22,11 @@ int main(void)
 		bytes_read = getline(&line, &bufsize, stdin);
 		if (bytes_read == -1)
 		{
+			if (isatty(STDIN_FILENO))				
 			perror("Getline Error");
-			exit(EXIT_FAILURE);
+			else
+				break;
 		}
-		if (bytes_read == 0)
-			break;
 
 		line[strcspn(line, "\n")] = '\0';
 		if (strcmp(line, "exit") == 0)
