@@ -21,8 +21,13 @@ int main(void)
 		bytes_read = getline(&line, &bufsize, stdin);
 		if (bytes_read == -1)
 		{
+			if (feof(stdin))
+			{
+				printf("Exiting Shell...\n");
+				break;
+			}
 			perror("Getline Error");
-			break;
+			continue;
 		}
 
 		line[strcspn(line, "\n")] = '\0';
@@ -30,5 +35,6 @@ int main(void)
 		execute_command(line);
 	}
 	free(line);
+	line = NULL;
 	return (0);
 }
