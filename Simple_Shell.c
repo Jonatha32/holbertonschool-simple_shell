@@ -4,8 +4,9 @@
 #include "shell.h"
 
 /**
+ * main - function
  *
- *
+ * Return: Always 0
  */
 
 int main(void)
@@ -22,10 +23,9 @@ int main(void)
 		bytes_read = getline(&line, &bufsize, stdin);
 		if (bytes_read == -1)
 		{
-			if (isatty(STDIN_FILENO))				
+			if (isatty(STDIN_FILENO))
 			perror("Getline Error");
-			else
-				break;
+			break;
 		}
 
 		line[strcspn(line, "\n")] = '\0';
